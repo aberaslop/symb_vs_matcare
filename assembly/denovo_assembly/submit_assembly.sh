@@ -1,16 +1,16 @@
 #!/bin/sh
 #Script to submit de novo assembly jobs
 
-STRAINS=$(cat ../strains)
+GENOME=$(cat ../genomes)
 
 for ASSEMBLER in abyss megahit spades
 do
 	mkdir ${ASSEMBLER}
 
-	for STRAIN in $STRAINS
+	for GENOME in $GENOMES
 	do
-		mkdir ${ASSEMBLER}/fusotu${STRAIN}
+		mkdir ${ASSEMBLER}/${GENOME}
 	done
 
-	qsub ${ASSEMBLER}.sh
+	sbatch ${ASSEMBLER}.sh #or would it be srun?
 done

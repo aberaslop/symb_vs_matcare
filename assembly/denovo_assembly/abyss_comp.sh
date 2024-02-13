@@ -1,16 +1,17 @@
 #!/bin/sh
 
-STRAINS=$(cat ../strains)
+GENOMES=$(cat ../genomes)
 
-module load abyss
+module load shared 2021 Miniconda3
+conda activate abyss
 
-for STRAIN in $STRAINS
+for GENOME in $GENOMES
 do
-	abyss-fac abyss/fusotu${STRAIN}/k*/fusotu${STRAIN}-contigs.fa > abyss/fusotu${STRAIN}/fusotu${STRAIN}_abyss_k_comparison.tsv
+	abyss-fac abyss/${GENOME}/k*/${GENOME}-contigs.fa > abyss/${GENOME}/${GENOME}_abyss_k_comparison.tsv
 
-	KMER=$(tail -n +2 abyss/fusotu${STRAIN}/fusotu${STRAIN}_abyss_k_comparison.tsv | sort -n -k 6 | awk '{print $11}' | sed "s#abyss/fusotu${STRAIN}/##" | sed "s#/fusotu${STRAIN}-contigs.fa##" | tail -n1)
+	KMER=$(tail -n +2 abyss/${GENOME}/${GENOME}_abyss_k_comparison.tsv | sort -n -k 6 | awk '{print $11}' | sed "s#abyss/${GENOME}/##" | sed "s#/${GENOME}-contigs.fa##" | tail -n1)
 
-	echo "${KMER} selected" >> abyss/fusotu${STRAIN}/fusotu${STRAIN}_abyss_k_comparison.tsv
+	echo "${KMER} selected" >> abyss/${GENOME}/${GENOME}_abyss_k_comparison.tsv
 
-	cp abyss/fusotu${STRAIN}/${KMER}/fusotu${STRAIN}-contigs.fa abyss/fusotu${STRAIN}/
+	cp abyss/${GENOME}/${KMER}/${GENOME}-contigs.fa abyss/${GENOME}/
 done
